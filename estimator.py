@@ -3,8 +3,8 @@ from communication import ComPort, CustomPacket
 import json
 
 # CHASIS CONSTANTS
-R_WHEEL = 0.05
-L_CHASSIS = 0.14
+R_WHEEL = 5.6 / 2 / 100
+L_CHASSIS = 0.095
 
 # MATH CONSTANTS  
 RAD2DEG = 180 / math.pi
@@ -22,7 +22,7 @@ class Navigator:
         self.y = 0
         self.the = 0
 
-    def __calc_dwheel(self, phi0, phi1, speed):
+    def __calc_dwheel(self, phi0, phi1, speed, sign=1):
         """
             phi0: last position in degree (0 - 360)
             phi1: cur position in degree (0 - 360)
@@ -31,19 +31,20 @@ class Navigator:
             return: change in angle
         """
         dphi = phi1 - phi0
+        return sign * dphi
 
-        if speed > 0:
-            if dphi >= 0:
-                return dphi
-            else:
-                return dphi + 360
-        elif speed < 0:
-            if dphi < 0:
-                return dphi
-            else:
-                return dphi - 360
-        else:
-            return 0
+        # if speed > 0:
+        #     if dphi >= 0:
+        #         return dphi
+        #     else:
+        #         return dphi + 360
+        # elif speed < 0:
+        #     if dphi < 0:
+        #         return dphi
+        #     else:
+        #         return dphi - 360
+        # else:
+        #     return 0
 
     def update(self, packet: CustomPacket):
         """
@@ -51,9 +52,13 @@ class Navigator:
             dl: change in left wheel angle
         """
         if self.last_packet is not None:
+            # dl = self.__calc_dwheel(self.last_packet.left_motor().rel_pos,
+            #                         packet.left_motor().rel_pos,
+            #                         packet.left_motor().speed)
             dl = self.__calc_dwheel(self.last_packet.left_motor().rel_pos,
                                     packet.left_motor().rel_pos,
-                                    packet.left_motor().speed)
+                                    packet.left_motor().speed, sign=-1)
+
             dr = self.__calc_dwheel(self.last_packet.right_motor().rel_pos,
                                     packet.right_motor().rel_pos,
                                     packet.right_motor().speed)
@@ -68,11 +73,11 @@ class Navigator:
             if self.the < -180:
                 self.the += 360
 
-            dx = (R_WHEEL/2) * math.sin(self.the * DEG2RAD) * (dr + dl)
-            dy = (R_WHEEL/2) * math.cos(self.the * DEG2RAD) * (dr + dl)
+            dx = (R_WHEEL/2) * math.sin(self.the * DEG2RAD) * (dr + dl) * DEG2RAD
+            dy = (R_WHEEL/2) * math.cos(self.the * DEG2RAD) * (dr + dl) * DEG2RAD
 
-            self.x += dx
-            self.y += dy
+            self.x += dx * 100
+            self.y += dy * 100
 
             self.last_packet = packet
 
