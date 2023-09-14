@@ -115,24 +115,28 @@ class MainWindow(QMainWindow):
         self.graphWidget = pg.PlotWidget(self.frame)
         self.graphWidget.setXRange(-50, 50, padding=0)
         self.graphWidget.setYRange(-50, 50, padding=0)
-        self.graphWidget.plotItem.vb.setLimits(xMin=-50, xMax=-50, yMin=-50, yMax=50)
-        self.graphWidget.setGeometry(0, 0, 441, 368)
+        self.graphWidget.setGeometry(12, 20, 579, 484)
         self.graphWidget.setBackground('w')
-
+        self.graphWidget.showGrid(x=True, y=True, alpha=0.2)
         # test background image
         # make plot with a line drawn in
         import numpy as np
         # add an image, scaled
         img = pg.ImageItem(np.random.normal(size=(100,100)))
         self.graphWidget.addItem(img)
-        arrow = pg.ArrowItem(pos=(0,0),  angle=90, brush=(255, 0, 0))
-        self.graphWidget.addItem(arrow)
-
-
-        self.x = [0]
-        self.y = [0]
+        self.arrow = pg.ArrowItem(pos=(0,0), angle=self.appstate.theta + 90, brush=(255, 0, 0))
+        self.graphWidget.addItem(self.arrow)
         pen = pg.mkPen(color=(255, 0, 0))
-        self.data_line =  self.graphWidget.plot(self.x, self.y, pen=pen)
+        self.data_line = self.graphWidget.plot(self.appstate.xtrace, self.appstate.ytrace, pen=pen)
+
+
+        # Create a tooltip item
+        # self.tooltip = QGraphicsTextItem()
+        # self.tooltip.setFlag(QGraphicsTextItem.ItemIgnoresTransformations)
+        # self.tooltip.setFlag(QGraphicsTextItem.ItemIsSelectable)
+        # self.tooltip.setDefaultTextColor(Qt.white)
+        # self.tooltip.setPos(0, 0)
+        # self.graphWidget.scene().sigSceneMousedMoved.connect(self.updatetooltip)
 
         # start thread pool
         self.threadpool = QThreadPool()
@@ -142,12 +146,11 @@ class MainWindow(QMainWindow):
         self.worker.setAutoDelete(True)
         self.threadpool.start(self.worker)
 
-        self.worker1 = Worker(self.test_com, self.com)
+        self.worker1 = Worker(self.update_appstate, self.com)
         # self.worker.signals.data.connect(self.display_com_ports)
+        self.worker1.signals.data.connect(self.update_plot_data)
         self.worker1.setAutoDelete(True)
         self.threadpool.start(self.worker1)
-
-
 
         # default page
         self.stackedWidget.setCurrentIndex(0)
@@ -172,9 +175,7 @@ class MainWindow(QMainWindow):
         self.pushBtnResetArm.clicked.connect(self.reset_arm)
         self.pushBtnSetSpeed.clicked.connect(self.set_speed)
         self.pushBtnLcd.clicked.connect(self.display_lcd)
-
-        self.worker1.signals.data.connect(self.update_plot_data)
-
+        self.pushBtnResetPos.clicked.connect(self.reset_position)
 
 
     def load_key_mapping(self):
@@ -279,41 +280,32 @@ class MainWindow(QMainWindow):
         kwargs['data'].emit(ports)
         time.sleep(0.5)
 
-    def test_com(self, *args, **kwargs):
+    def update_appstate(self, *args, **kwargs):
         packet = self.com.recv_data()
         if packet:
             self.nav.update(packet)
-            xs = self.x
-            ys = self.y
-
-            xs.append(int(self.nav.x))
-            ys.append(int(self.nav.y))
-  
-            if len(xs)>100:
-                kwargs['data'].emit((xs[-100:], ys[-100:]))
-            else:
-                kwargs['data'].emit((xs, ys))
-
-
-        # data = self.com.recv()
-        # if data:
-        #     # print(data)
-        #     m = re.findall('(?<=Value:)(\d+),(\d+)', data)
-        #     xs = self.x
-        #     ys = self.y
-        #     print(m)
-        #     if len(m)>0:
-        #         x, y = (m[0][0], m[0][1])
-        #         xs.append(int(x))
-        #         ys.append(int(y))
-        #         if len(xs)>100:
-        #             kwargs['data'].emit((xs[-100:], ys[-100:]))
-        #         else:
-        #             kwargs['data'].emit((xs, ys))
-        # # time.sleep(0.05)
+            self.appstate.x_current = int(self.nav.x)
+            self.appstate.y_current = int(self.nav.y)
+            self.appstate.theta = int(self.nav.the)
+            kwargs['data'].emit(packet)
 
     def update_plot_data(self, data):
-        self.data_line.setData(data[0], data[1])
+        self.data_line.setData(self.appstate.xtrace, self.appstate.ytrace)
+        self.arrow.setPos(self.appstate.x_current, self.appstate.y_current)
+        self.arrow.setStyle(angle=self.appstate.theta + 90)
+
+    def reset_position(self):
+        x0 = int(self.lineEditResetX.text())
+        y0 = int(self.lineEditResetY.text())
+        the0 = int(self.lineEditResetThe.text())
+
+        self.nav.reset(x=x0, y=y0, the=the0)
+        self.appstate.reset_trace()
+        self.appstate.x_current = int(self.nav.x)
+        self.appstate.y_current = int(self.nav.y)
+        self.data_line.setData(self.appstate.xtrace, self.appstate.ytrace)
+        self.arrow.setPos(self.appstate.x_current, self.appstate.y_current)
+        self.arrow.setStyle(angle=self.appstate.theta + 90)
 
     def closeEvent(self, event):
         print('preparing to exit...')

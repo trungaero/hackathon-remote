@@ -17,10 +17,10 @@ class Navigator:
         self.y = y0
         self.the = the0
 
-    def reset(self):
-        self.x = 0
-        self.y = 0
-        self.the = 0
+    def reset(self, x=0, y=0, the=0):
+        self.x = x
+        self.y = y
+        self.the = the
 
     def __calc_dwheel(self, phi0, phi1, speed, sign=1):
         """
