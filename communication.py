@@ -1,6 +1,8 @@
 import serial
 import serial.tools.list_ports
 import time
+import json
+from typing import Dict
 
 class Commands:
     SET_MODE  = 'm'
@@ -75,29 +77,49 @@ class ComPort:
     def recv(self):
         line = None
         try:
-            # line = self.ser.read(10)
             line = self.ser.readline().decode('utf-8').strip()
-            # print(len(line))
         except:
             pass
         return line
 
+    def recv_data(self):
+        raw = self.recv()
+        if raw:
+            try:
+                data = json.loads(raw.strip())
+                if 'm' in data and data['m']==0  and len(data['p'])==12:
+                    return CustomPacket(data['p'])
+            except:
+                pass
+
+           
+class Packet:
+    def __init__(self, p_data: Dict):
+        self.port_A = p_data[0]
+        self.port_B = p_data[1]
+        self.port_C = p_data[2]
+        self.port_D = p_data[3]
+        self.port_E = p_data[4]
+        self.port_F = p_data[5]
+        self.accel  = p_data[6]
+        self.gyro   = p_data[7]
+        self.attitude = p_data[8]
+        self.unknown = p_data[9]
+        self.time = p_data[10]
+        self.reserve = p_data[11]
 
 
-class Parser:
-    pass
+class MotorData:
+    def __init__(self, p_data):
+        self.speed = p_data[1][0]
+        self.rel_pos = p_data[1][1]
+        self.abs_pos = p_data[1][2]
+        self.pwm = p_data[1][3]
 
 
-
-if __name__ == '__main__':
-    c = ComPort('COM9')
-    ser = c.connect()
-    while True:
-        line = ser.readline().decode('utf-8').strip()
-        if line:
-            print(line)
-    with serial.Serial('COM9', 9600, timeout=0) as ser:
-        while True:
-            line = ser.readline().decode('utf-8').strip()
-            if line:
-                print(line)
+class CustomPacket(Packet):
+    def left_motor(self):
+        return MotorData(self.port_A)
+    
+    def right_motor(self):
+        return MotorData(self.port_B)

@@ -13,7 +13,7 @@ import traceback, sys
 from communication import Commands, Mode, Direction, ArmDirection, list_ports, ComPort
 from model import AppState
 import time
-import re
+from estimator import Navigator
 
 
 class WorkerSignals(QObject):
@@ -109,11 +109,26 @@ class MainWindow(QMainWindow):
 
         # initialize com port
         self.com = ComPort('')
+        self.nav = Navigator()
 
         # plot
         self.graphWidget = pg.PlotWidget(self.frame)
+        self.graphWidget.setXRange(-50, 50, padding=0)
+        self.graphWidget.setYRange(-50, 50, padding=0)
+        self.graphWidget.plotItem.vb.setLimits(xMin=-50, xMax=-50, yMin=-50, yMax=50)
         self.graphWidget.setGeometry(0, 0, 441, 368)
         self.graphWidget.setBackground('w')
+
+        # test background image
+        # make plot with a line drawn in
+        import numpy as np
+        # add an image, scaled
+        img = pg.ImageItem(np.random.normal(size=(100,100)))
+        self.graphWidget.addItem(img)
+        arrow = pg.ArrowItem(pos=(0,0),  angle=90, brush=(255, 0, 0))
+        self.graphWidget.addItem(arrow)
+
+
         self.x = [0]
         self.y = [0]
         pen = pg.mkPen(color=(255, 0, 0))
@@ -265,22 +280,37 @@ class MainWindow(QMainWindow):
         time.sleep(0.5)
 
     def test_com(self, *args, **kwargs):
-        data = self.com.recv()
-        if data:
-            # print(data)
-            m = re.findall('(?<=Value:)(\d+),(\d+)', data)
+        packet = self.com.recv_data()
+        if packet:
+            self.nav.update(packet)
             xs = self.x
             ys = self.y
-            print(m)
-            if len(m)>0:
-                x, y = (m[0][0], m[0][1])
-                xs.append(int(x))
-                ys.append(int(y))
-                if len(xs)>100:
-                    kwargs['data'].emit((xs[-100:], ys[-100:]))
-                else:
-                    kwargs['data'].emit((xs, ys))
-        # time.sleep(0.05)
+
+            xs.append(int(self.nav.x))
+            ys.append(int(self.nav.y))
+  
+            if len(xs)>100:
+                kwargs['data'].emit((xs[-100:], ys[-100:]))
+            else:
+                kwargs['data'].emit((xs, ys))
+
+
+        # data = self.com.recv()
+        # if data:
+        #     # print(data)
+        #     m = re.findall('(?<=Value:)(\d+),(\d+)', data)
+        #     xs = self.x
+        #     ys = self.y
+        #     print(m)
+        #     if len(m)>0:
+        #         x, y = (m[0][0], m[0][1])
+        #         xs.append(int(x))
+        #         ys.append(int(y))
+        #         if len(xs)>100:
+        #             kwargs['data'].emit((xs[-100:], ys[-100:]))
+        #         else:
+        #             kwargs['data'].emit((xs, ys))
+        # # time.sleep(0.05)
 
     def update_plot_data(self, data):
         self.data_line.setData(data[0], data[1])
