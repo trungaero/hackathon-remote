@@ -10,7 +10,7 @@ from pyqtgraph import PlotWidget, plot
 import pyqtgraph as pg
 
 import traceback, sys
-from communication import Commands, Mode, Direction, ArmDirection, list_ports, ComPort
+from communication import Commands, Mode, Direction, list_ports, ComPort
 from model import AppState
 import time
 from estimator import Navigator
@@ -166,13 +166,13 @@ class MainWindow(QMainWindow):
         self.pushBtnMoveBackward.clicked.connect(self.send_command)
         self.pushBtnRotateLeft.clicked.connect(self.send_command)
         self.pushBtnRotateRight.clicked.connect(self.send_command)
-        self.pushBtnPullArm.clicked.connect(self.send_command)
-        self.pushBtnPushArm.clicked.connect(self.send_command)
+        # self.pushBtnPullArm.clicked.connect(self.send_command)
+        self.pushBtnSetArm.clicked.connect(self.set_arm)
         self.pushBtnExtendFoot.clicked.connect(self.change_foot_length)
         self.pushBtnContractFoot.clicked.connect(self.change_foot_length)
         self.verticalSlider.valueChanged.connect(self.change_foot_length_slider)
         self.pushBtnResetFoot.clicked.connect(self.reset_foot_length)
-        self.pushBtnResetArm.clicked.connect(self.reset_arm)
+        # self.pushBtnResetArm.clicked.connect(self.reset_arm)
         self.pushBtnSetSpeed.clicked.connect(self.set_speed)
         self.pushBtnLcd.clicked.connect(self.display_lcd)
         self.pushBtnResetPos.clicked.connect(self.reset_position)
@@ -186,8 +186,9 @@ class MainWindow(QMainWindow):
             Qt.Key_L: (self.pushBtnRotateRight, Commands.MOVE, Direction.RRIGHT),
             Qt.Key_Q: (self.pushBtnExtendFoot, Commands.SET_FOOT),
             Qt.Key_A: (self.pushBtnContractFoot, Commands.SET_FOOT),
-            Qt.Key_E: (self.pushBtnPullArm, Commands.SET_ARM, ArmDirection.PULL),
-            Qt.Key_D: (self.pushBtnPushArm, Commands.SET_ARM, ArmDirection.PUSH),
+            # Qt.Key_E: (self.pushBtnPullArm, Commands.SET_ARM, ArmDirection.PULL),
+            # Qt.Key_D: (self.pushBtnPushArm, Commands.SET_ARM, ArmDirection.PUSH),
+            Qt.Key_D: (self.pushBtnSetArm, Commands.SET_ARM),
         }
 
 
@@ -206,6 +207,8 @@ class MainWindow(QMainWindow):
 
     def keyPressEvent(self, event: QKeyEvent):
         key = event.key()
+
+        # highlight keys
         if key in self.key_mapping:
             highlight_button(self.key_mapping[key][0])
             self.key_mapping[key][0].clicked.emit()
@@ -226,7 +229,6 @@ class MainWindow(QMainWindow):
             mode_keys[event.key()][1].setChecked(True)
             self.com.send(Commands.SET_MODE, mode_keys[event.key()][0])
             
-
 
     def send_command(self):
         sender_button = self.sender() 
@@ -261,13 +263,18 @@ class MainWindow(QMainWindow):
         self.appstate.foot_len = self.verticalSlider.value()
         self.com.send(Commands.SET_FOOT, self.appstate.foot_len)
 
+    def set_arm(self):
+        arm_cnt = int(self.spinBoxArmCount.value())
+        arm_distance = int(self.spinBoxArmDistance.value())
+        self.com.send(Commands.SET_ARM, str(arm_cnt * arm_distance))
+
     def reset_foot_length(self):
         self.appstate.foot_len = 0
         self.verticalSlider.setValue(self.appstate.foot_len)
         self.com.send(Commands.SET_FOOT, self.appstate.foot_len)
 
-    def reset_arm(self):
-        self.com.send(Commands.SET_ARM, ArmDirection.NULL)
+    # def reset_arm(self):
+    #     self.com.send(Commands.SET_ARM, ArmDirection.NULL)
 
     def set_speed(self):
         self.com.send(Commands.SET_SPEED, int(self.spinBoxSpeed.value()))

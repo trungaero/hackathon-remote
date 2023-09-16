@@ -24,10 +24,10 @@ class Direction:
     RLEFT    = 3
     RRIGHT   = 4
 
-class ArmDirection:
-    NULL = 0
-    PULL = 1
-    PUSH = 2
+# class ArmDirection:
+#     NULL = 0
+#     PULL = 1
+#     PUSH = 2
 
 
 
@@ -69,10 +69,11 @@ class ComPort:
             self.ser.close()
 
     def send(self, cmd, value=''):       
-        as_bytes = bytes(f'{cmd}{value}\n', encoding='utf-8') 
+        as_bytes = bytes(f'{cmd}{value}', encoding='utf-8') 
         if self.debug:
             print(as_bytes)
-        self.ser.write(as_bytes)
+        else:
+            self.ser.write(as_bytes)
 
     def recv(self):
         line = None

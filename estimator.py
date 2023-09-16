@@ -57,11 +57,11 @@ class Navigator:
             #                         packet.left_motor().speed)
             dl = self.__calc_dwheel(self.last_packet.left_motor().rel_pos,
                                     packet.left_motor().rel_pos,
-                                    packet.left_motor().speed, sign=-1)
+                                    packet.left_motor().speed)
 
             dr = self.__calc_dwheel(self.last_packet.right_motor().rel_pos,
                                     packet.right_motor().rel_pos,
-                                    packet.right_motor().speed)
+                                    packet.right_motor().speed, sign=-1)
 
 
             dthe = R_WHEEL / L_CHASSIS * (dl - dr)

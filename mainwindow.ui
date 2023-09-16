@@ -692,19 +692,6 @@ QGroupBox::title {
                  </property>
                 </widget>
                </item>
-               <item row="1" column="6">
-                <spacer name="horizontalSpacer_7">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
                <item row="1" column="1">
                 <widget class="QLabel" name="label_5">
                  <property name="text">
@@ -743,26 +730,6 @@ QGroupBox::title {
                   </size>
                  </property>
                 </spacer>
-               </item>
-               <item row="1" column="3">
-                <spacer name="horizontalSpacer_8">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item row="1" column="8">
-                <widget class="QPushButton" name="pushBtnPullArm">
-                 <property name="text">
-                  <string>Pull (E)</string>
-                 </property>
-                </widget>
                </item>
                <item row="1" column="4">
                 <widget class="QPushButton" name="pushBtnExtendFoot">
@@ -806,9 +773,9 @@ QGroupBox::title {
                 </widget>
                </item>
                <item row="2" column="8">
-                <widget class="QPushButton" name="pushBtnPushArm">
+                <widget class="QPushButton" name="pushBtnSetArm">
                  <property name="text">
-                  <string>Push (D)</string>
+                  <string>Set (D)</string>
                  </property>
                 </widget>
                </item>
@@ -821,13 +788,6 @@ QGroupBox::title {
                </item>
                <item row="0" column="4">
                 <widget class="QPushButton" name="pushBtnResetFoot">
-                 <property name="text">
-                  <string>Reset</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="8">
-                <widget class="QPushButton" name="pushBtnResetArm">
                  <property name="text">
                   <string>Reset</string>
                  </property>
@@ -896,6 +856,65 @@ QGroupBox::title {
                   <string>Backward</string>
                  </property>
                 </widget>
+               </item>
+               <item row="1" column="8">
+                <widget class="QSpinBox" name="spinBoxArmCount"/>
+               </item>
+               <item row="0" column="8">
+                <widget class="QSpinBox" name="spinBoxArmDistance">
+                 <property name="autoFillBackground">
+                  <bool>false</bool>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: rgb(170, 170, 127);</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="3">
+                <widget class="QLabel" name="label_14">
+                 <property name="text">
+                  <string>Foot</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="6">
+                <widget class="QLabel" name="label_15">
+                 <property name="text">
+                  <string>Arm</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="6">
+                <spacer name="horizontalSpacer_7">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="2" column="3">
+                <spacer name="horizontalSpacer_8">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
                </item>
               </layout>
              </item>
