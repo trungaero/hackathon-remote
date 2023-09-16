@@ -11,6 +11,7 @@ class Commands:
     SET_ARM   = 'a'
     SET_DISP  = 'd'
     MOVE      = 'n'
+    HOLD      = ' '
 
 class Mode:
     MANUAL = 0
@@ -49,7 +50,7 @@ class ComPort:
     def __init__(self, device_name):
         self.device_name = device_name
         self.ser = None
-        self.debug = True
+        self.debug = False
 
     def is_available(self):
         return self.device_name in list_ports()

@@ -177,6 +177,10 @@ class MainWindow(QMainWindow):
         self.pushBtnLcd.clicked.connect(self.display_lcd)
         self.pushBtnResetPos.clicked.connect(self.reset_position)
 
+        self.timer = QTimer()
+        self.timer.setInterval(200)
+        self.timer.timeout.connect(self.request_hold_drive_motor)
+
 
     def load_key_mapping(self):
         return {
@@ -207,11 +211,12 @@ class MainWindow(QMainWindow):
 
     def keyPressEvent(self, event: QKeyEvent):
         key = event.key()
+        self.timer.stop()
 
         # highlight keys
         if key in self.key_mapping:
-            highlight_button(self.key_mapping[key][0])
             self.key_mapping[key][0].clicked.emit()
+            highlight_button(self.key_mapping[key][0])
         
         # sending modes via keyboard
         mode_keys = {
@@ -240,6 +245,10 @@ class MainWindow(QMainWindow):
         key = event.key()
         if key in self.key_mapping:
             unhighlight_button(self.key_mapping[key][0])
+        self.timer.start()
+
+    def request_hold_drive_motor(self):
+        self.com.send(Commands.HOLD)
 
     def toggle_com_connection(self):
         self.com.device_name = self.comboBoxComPort.currentText()
