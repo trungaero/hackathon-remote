@@ -27,6 +27,9 @@ QGroupBox::title {
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="focusPolicy">
+    <enum>Qt::StrongFocus</enum>
+   </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <layout class="QFormLayout" name="formLayout">
@@ -311,7 +314,7 @@ QGroupBox::title {
              <item row="1" column="5">
               <widget class="QLabel" name="label_3">
                <property name="text">
-                <string>Hold Ctrl + 0,1..</string>
+                <string>(Ctrl 0[1, 2, 3])</string>
                </property>
               </widget>
              </item>
@@ -674,164 +677,85 @@ QGroupBox::title {
              </size>
             </property>
             <property name="title">
-             <string>Motor controls</string>
+             <string/>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_6">
              <item>
               <layout class="QGridLayout" name="gridLayout">
-               <item row="1" column="2">
-                <widget class="QSpinBox" name="spinBoxSpeed">
-                 <property name="minimumSize">
-                  <size>
-                   <width>100</width>
-                   <height>0</height>
-                  </size>
+               <item row="5" column="4" rowspan="2">
+                <widget class="QLCDNumber" name="lcdSpeed"/>
+               </item>
+               <item row="0" column="6" colspan="3">
+                <layout class="QVBoxLayout" name="verticalLayout_10">
+                 <item>
+                  <widget class="QLabel" name="label_14">
+                   <property name="styleSheet">
+                    <string notr="true">font: 100 10pt &quot;MS Shell Dlg 2&quot;;
+font-weight: bold;
+color: rgb(170, 85, 0);</string>
+                   </property>
+                   <property name="text">
+                    <string>Foot</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignHCenter|Qt::AlignTop</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_20">
+                   <property name="text">
+                    <string>(+: Alt Q, -: Alt A)</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="5" column="7" rowspan="2">
+                <widget class="QGroupBox" name="groupBox_8">
+                 <property name="title">
+                  <string/>
                  </property>
-                 <property name="maximum">
-                  <number>100</number>
-                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_8">
+                  <item>
+                   <widget class="QRadioButton" name="radioBtnFoot1">
+                    <property name="text">
+                     <string>1</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="radioBtnFoot10">
+                    <property name="text">
+                     <string>10</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </widget>
                </item>
-               <item row="1" column="1">
-                <widget class="QLabel" name="label_5">
-                 <property name="text">
-                  <string>Set speed (%)</string>
-                 </property>
-                </widget>
+               <item row="6" column="11">
+                <layout class="QHBoxLayout" name="horizontalLayout_13">
+                 <item>
+                  <widget class="QLabel" name="label_18">
+                   <property name="text">
+                    <string>Offset</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSpinBox" name="spinBoxArmOffset">
+                   <property name="styleSheet">
+                    <string notr="true">background-color: rgb(170, 170, 127);</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </item>
-               <item row="2" column="4">
-                <widget class="QPushButton" name="pushBtnContractFoot">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>100</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string>Contract (A)</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="10">
-                <spacer name="horizontalSpacer_6">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item row="1" column="4">
-                <widget class="QPushButton" name="pushBtnExtendFoot">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>100</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string>Extend (Q)</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="5" rowspan="2">
-                <widget class="QSlider" name="verticalSlider">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>50</height>
-                  </size>
-                 </property>
-                 <property name="maximum">
-                  <number>100</number>
-                 </property>
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="8">
-                <widget class="QPushButton" name="pushBtnSetArm">
-                 <property name="text">
-                  <string>Set (D)</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="2">
-                <widget class="QPushButton" name="pushBtnSetSpeed">
-                 <property name="text">
-                  <string>SET</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="4">
-                <widget class="QPushButton" name="pushBtnResetFoot">
-                 <property name="text">
-                  <string>Reset</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="12">
-                <widget class="QPushButton" name="pushBtnMoveForward">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>100</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string>Forward</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="11">
-                <widget class="QPushButton" name="pushBtnRotateLeft">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>100</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string>Left</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="13">
+               <item row="5" column="16" rowspan="2">
                 <widget class="QPushButton" name="pushBtnRotateRight">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -842,7 +766,7 @@ QGroupBox::title {
                  <property name="minimumSize">
                   <size>
                    <width>100</width>
-                   <height>0</height>
+                   <height>70</height>
                   </size>
                  </property>
                  <property name="text">
@@ -850,47 +774,7 @@ QGroupBox::title {
                  </property>
                 </widget>
                </item>
-               <item row="1" column="12">
-                <widget class="QPushButton" name="pushBtnMoveBackward">
-                 <property name="text">
-                  <string>Backward</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="8">
-                <widget class="QSpinBox" name="spinBoxArmCount"/>
-               </item>
-               <item row="0" column="8">
-                <widget class="QSpinBox" name="spinBoxArmDistance">
-                 <property name="autoFillBackground">
-                  <bool>false</bool>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">background-color: rgb(170, 170, 127);</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="3">
-                <widget class="QLabel" name="label_14">
-                 <property name="text">
-                  <string>Foot</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="6">
-                <widget class="QLabel" name="label_15">
-                 <property name="text">
-                  <string>Arm</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="6">
+               <item row="6" column="9">
                 <spacer name="horizontalSpacer_7">
                  <property name="orientation">
                   <enum>Qt::Horizontal</enum>
@@ -903,7 +787,7 @@ QGroupBox::title {
                  </property>
                 </spacer>
                </item>
-               <item row="2" column="3">
+               <item row="6" column="5">
                 <spacer name="horizontalSpacer_8">
                  <property name="orientation">
                   <enum>Qt::Horizontal</enum>
@@ -915,6 +799,241 @@ QGroupBox::title {
                   </size>
                  </property>
                 </spacer>
+               </item>
+               <item row="5" column="14" rowspan="2">
+                <widget class="QPushButton" name="pushBtnRotateLeft">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>100</width>
+                   <height>70</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>Left</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="8" rowspan="2">
+                <widget class="QLCDNumber" name="lcdFoot"/>
+               </item>
+               <item row="0" column="15">
+                <widget class="QPushButton" name="pushBtnMoveForward">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>100</width>
+                   <height>70</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>Forward</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="6" rowspan="2">
+                <layout class="QHBoxLayout" name="horizontalLayout_10">
+                 <item>
+                  <widget class="QSlider" name="sliderFoot">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>50</height>
+                    </size>
+                   </property>
+                   <property name="maximum">
+                    <number>100</number>
+                   </property>
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="5" column="11">
+                <layout class="QHBoxLayout" name="horizontalLayout_5">
+                 <item>
+                  <widget class="QLabel" name="label_17">
+                   <property name="text">
+                    <string>Scale</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSpinBox" name="spinBoxArmDistance">
+                   <property name="autoFillBackground">
+                    <bool>false</bool>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color: rgb(170, 170, 127);</string>
+                   </property>
+                   <property name="maximum">
+                    <number>360</number>
+                   </property>
+                   <property name="value">
+                    <number>90</number>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="5" column="3" rowspan="2">
+                <widget class="QGroupBox" name="groupBox_7">
+                 <property name="title">
+                  <string/>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_6">
+                  <item>
+                   <widget class="QRadioButton" name="radioBtnSpeed1">
+                    <property name="text">
+                     <string>1</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="radioBtnSpeed10">
+                    <property name="text">
+                     <string>10</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item row="5" column="12" rowspan="2">
+                <widget class="QLCDNumber" name="lcdArm">
+                 <property name="layoutDirection">
+                  <enum>Qt::LeftToRight</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2" colspan="3">
+                <layout class="QVBoxLayout" name="verticalLayout_9">
+                 <property name="leftMargin">
+                  <number>10</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>10</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="label_5">
+                   <property name="styleSheet">
+                    <string notr="true">font: 100 10pt &quot;MS Shell Dlg 2&quot;;
+font-weight: bold;
+color: rgb(170, 85, 0);</string>
+                   </property>
+                   <property name="text">
+                    <string>Set speed (%)</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignHCenter|Qt::AlignTop</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_19">
+                   <property name="text">
+                    <string>(+: Q, -: A)</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="0" column="11" colspan="2">
+                <layout class="QVBoxLayout" name="verticalLayout_4">
+                 <property name="leftMargin">
+                  <number>5</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>5</number>
+                 </property>
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_7">
+                   <item>
+                    <widget class="QLabel" name="label_15">
+                     <property name="styleSheet">
+                      <string notr="true">font: 100 10pt &quot;MS Shell Dlg 2&quot;;
+font-weight: bold;
+color: rgb(170, 85, 0);</string>
+                     </property>
+                     <property name="text">
+                      <string>Arm</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignHCenter|Qt::AlignTop</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_16">
+                     <property name="text">
+                      <string>(Alt 0[1 ,2, 3])</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+               <item row="5" column="15" rowspan="2">
+                <widget class="QPushButton" name="pushBtnMoveBackward">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>70</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>Backward</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="13">
+                <spacer name="horizontalSpacer_6">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="5" column="2" rowspan="2">
+                <layout class="QHBoxLayout" name="horizontalLayout_8">
+                 <item>
+                  <widget class="QSlider" name="sliderSpeed">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </item>
               </layout>
              </item>

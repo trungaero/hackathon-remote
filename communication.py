@@ -121,7 +121,7 @@ class MotorData:
 
 class CustomPacket(Packet):
     def left_motor(self):
-        return MotorData(self.port_A)
+        return MotorData(self.port_B)
     
     def right_motor(self):
-        return MotorData(self.port_B)
+        return MotorData(self.port_A)
